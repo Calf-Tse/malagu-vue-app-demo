@@ -1,0 +1,61 @@
+malagu:
+  logger:
+    level: debug #info
+  client:
+    config:
+      withCredentials: true
+      headers:
+        X-Requested-With: XMLHttpRequest
+  security:
+    enabled: true
+    usernameKey: username
+    passwordKey: password
+    loginRequired: true
+    targetUrlParameter: loginTarget
+    loginVuePage: /#/auth/login
+    loginPage: ${malagu.security.loginVuePage}?${malagu.security.targetUrlParameter}={redirect}
+  server:
+    port: 3001
+  webpack:
+    config:
+      devServer:
+        allowedHosts: ["localhost", "192.168.2.4"]
+      output:
+        publicPath: ""
+
+backend:
+  malagu:
+    web:
+      body:
+        limit: 3mb
+    security:
+      contextKey: malagu:securityContext
+      username: admin
+      password: MzQ0NTg4ZTk2NzQyYWI1ODA1MDFlNDBjMzZhZDY4OWQ1Zjc5ZDYxYzc2MjQ1NWZk # raw password 123456
+      passwordEncoder:
+        secret: 1111
+        encodeHashAsBase64: true
+      basic:
+        realm: realm
+      loginPage: ${malagu.security.loginVuePage}?${malagu.security.targetUrlParameter}={redirect}
+      loginUrl: /login
+      loginMethod: POST
+      loginSuccessUrl: /#/about
+      logoutUrl: /logout
+      logoutMethod: POST
+      logoutSuccessUrl: ${malagu.security.loginVuePage}
+    typeorm:
+      ormConfig:
+        - type: mysql
+          host: localhost
+          port: 3306
+          synchronize: true
+          username: root
+          password:
+          database: test
+          useUnifiedTopology: true
+
+frontend:
+  malagu:
+    security:
+      loginPage: ${malagu.security.loginVuePage}?${malagu.security.targetUrlParameter}={redirect}
